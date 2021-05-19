@@ -1,59 +1,72 @@
 package browserTesting;
 
-
-import cucumber.api.java.en.Given;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class Steps {
 
-    WebDriver driver;
+	WebDriver driver;
+	String baseUrl = "https://qa-automation-challenge.github.io/sandbox/";
+	String priceExpeted = "2249.10 $";
+	String duration = "6";
+	PageObject pageobject;
+	
+	
+	public Steps(WebDriver driver) {
 
-    @Given("^I open Chrome and launch the application$")
-    public void openChromeAndLaunchApplication()
-    {}
+		this.driver = driver;
+		pageobject = new PageObject(driver);
+	}
 
-    @When("^I select type \"(.*)\"$")
-    public void selectType(String type)
-    {
-        Select select = new Select(driver.findElement(By.id("type")));
-        select.selectByVisibleText(type);
-    }
+	
+	
+	public void WorkFlow() {
 
-    @When("^I select support plan \"(.*)\"$")
-    public void selectSupportPlan(String plan)
-    {
-        Select select = new Select(driver.findElement(By.id("support")));
-        select.selectByVisibleText(plan);
-    }
+		
+		NavegateUrl(baseUrl);
+		selectType();
+		selectSupportPlan();
+		writeMonthlyDuration(duration);
+		clickCalculatePriceButton();
+		Assert();
 
-    @When("^I write monthly duration of \"(.*)\"$")
-    public void writeMonthlyDuration (String duration)
-    {
-        driver.findElement(By.id("duration")).sendKeys(duration);
-    }
+	}
 
-    @When("^I click in calculate price button")
-    public void clickCalculatePriceButton()
-    {
-        driver.findElement(By.id("calculate")).click();
-    }
+	public void NavegateUrl(String baseUrl) {
+		driver.get(baseUrl);
+		driver.manage().window().maximize();
+	}
 
-    @Then("^I validate price is \"(.*)\"$")
-    public void	validatePrice(String price) throws InterruptedException {
-        Thread.sleep(5*1000);
-        Assert.assertEquals(price, driver.findElement(By.id("price")).getText());
-    }
+	public void selectType() {
+		pageobject.Type().click();
+	}
 
-/*
-    @Then("^I attach file \"(.*)\"$")
-    public void	attachFile(String file) throws  {
-        WebElement uploadElement = driver.findElement(By.id("attachment"));
-        uploadElement.sendKeys(file);
-    }
-*/
+	public void selectSupportPlan() {
+		pageobject.Plan().click();
+	}
+
+	public void writeMonthlyDuration(String duration) {
+		pageobject.Monthlyduration().sendKeys(duration);
+	}
+
+	public void clickCalculatePriceButton() {
+		pageobject.Calculate().click();
+	}
+
+	public void validatePrice(String price) throws InterruptedException {
+		Assert();
+	}
+
+	public void Assert() {
+
+		WebDriverWait wait = new WebDriverWait(driver, 10);
+		WebElement priceFromScreen = wait
+				.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//*[@id=\"price\"]"))));
+		Assert.assertEquals(priceExpeted, priceFromScreen.getText());
+	}
+
 }
