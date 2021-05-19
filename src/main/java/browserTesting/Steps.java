@@ -57,10 +57,6 @@ public class Steps {
 		pageobject.Calculate().click();
 	}
 
-	public void validatePrice(String price) throws InterruptedException {
-		Assert();
-	}
-
 	public void Assert() {
 
 		WebDriverWait wait = new WebDriverWait(driver, 10);
