@@ -1,23 +1,28 @@
 package webServiceTesting;
 
-import io.restassured.RestAssured;
-import io.restassured.specification.RequestSpecification;
+import static io.restassured.RestAssured.given;
+import io.restassured.http.ContentType;
 
 public class CreateUser {
 
   private String name;
   private String job;
-  private final RequestSpecification requestSpecification;
-
-  public CreateUser() {
-    this.requestSpecification = RestAssured.given()
-        .baseUri("https://reqres.in/api")
-        .basePath("/users");
+  
+  public void CreateUserNameAndJob(String uri) {
+	  
+	  	String jsonWithUserAndJob = "{\n" + "    \"name\": \"" +name+"\",\n" + "    \""+job+"\": \"testJob\"\n" + "}";
+		
+	  	given().contentType(ContentType.JSON).
+		body(jsonWithUserAndJob).
+		when().post(uri).
+		then().
+		statusCode(201).
+		log().
+		all();	
+	  		  	
   }
 
-  public RequestSpecification getRequestSpecification() {
-    return requestSpecification;
-  }
+ 
 
   public void setName(String name) {
     this.name = name;
@@ -27,11 +32,5 @@ public class CreateUser {
     this.job = job;
   }
 
-  public String buildBody() {
-    return null;
-  }
 
-  public String buildBodyWithSurname() {
-    return null;
-  }
 }

@@ -9,7 +9,7 @@ public class Setup {
 
 	public WebDriver SetupDriver() {
 
-		System.setProperty("webdriver.chrome.driver", "C:\\Users\\cscislewski\\Desktop\\Cassiano\\chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver", "C://Users//cscislewski//Desktop//Cassiano//chromedriver.exe");
 
 		driver = new ChromeDriver();
 
